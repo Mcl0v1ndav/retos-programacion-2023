@@ -1,0 +1,201 @@
+using System;
+using System.Collections.Concurrent;
+using System.Drawing;
+using System.Linq;
+using System.Security.Cryptography;
+using System.Threading.Tasks.Dataflow;
+using System.Xml;
+
+namespace program
+{
+    class program
+    {
+        static void Main(string[] cad)
+        {
+            int longitud = 0;
+            string mayus;
+            string numeros;
+            string simbolos;
+            List<char> contraseña = new(longitud);
+
+            Console.WriteLine("--------------Generador de contraseñas--------------");
+            do
+            {
+                do
+                {
+                    try
+                    {
+                        Console.WriteLine("Por favor escribre el rango de tu nueva contraseña (entre 8 y 16 caracteres)");
+                        longitud = Convert.ToInt32(Console.ReadLine());
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine(ex.Message);
+                    }
+                } while (longitud > 16);
+            } while (longitud < 8);
+
+            do
+            {
+                Console.WriteLine("¿Deseas que lleve convinaciones con letras mayusculas?");
+                mayus = Console.ReadLine();
+                if (mayus != "si")
+                {
+                    if (mayus != "no")
+                    {
+                        Console.WriteLine("*Solo puede responder si o no*");
+                    }
+                }
+            } while ((mayus != "si") && (mayus != "no"));
+
+            do
+            {
+                Console.WriteLine("¿Deseas que lleve convinaciones numericas?");
+                numeros = Console.ReadLine();
+                if (numeros != "si")
+                {
+                    if (numeros != "no")
+                    {
+                        Console.WriteLine("*Solo puede responder si o no*");
+                        numeros = "";
+                    }
+                }
+            } while ((numeros != "si") && (numeros != "no"));
+
+            do
+            {
+                Console.WriteLine("¿Deseas que lleve convinaciones de simbolos?");
+                simbolos = Console.ReadLine();
+                if (simbolos != "si")
+                {
+                    if (simbolos != "no")
+                    {
+                        Console.WriteLine("*Solo puede responder si o no*");
+                        simbolos = "";
+                    }
+                }
+            } while ((simbolos != "si") && (simbolos != "no"));
+
+            for (int i = 0; i <= longitud-1; i++)
+            {
+                contraseña.Add('x');
+            }
+
+            if ((mayus == "si") && (numeros == "si") && (simbolos == "si"))
+            {
+                for (int i = 0; i <= longitud - 1; i++)
+                {
+                    if (i < 3)
+                        contraseña[i] = NumeroRandomChar();
+                    else if (i < 6)
+                        contraseña[i] = MayusRandom();
+                    else if (i < 8)                   
+                        contraseña[i] = SimboloRandom();                    
+                    else
+                        contraseña[i] = MinusRandom();
+                }
+                CambioImpresion(longitud, contraseña);
+            }
+            else if((mayus == "si") && (numeros == "no") && (simbolos == "si"))
+            {
+                for (int i = 0; i <= longitud-1; i++)
+                {
+                    if (i < 3)
+                        contraseña[i] = MinusRandom();
+                    else if (i < 6)
+                        contraseña[i] = MayusRandom();
+                    else if (i < 8)
+                        contraseña[i] = SimboloRandom();
+                    else
+                        contraseña[i] = MinusRandom();
+                }
+                CambioImpresion(longitud, contraseña);
+            }
+            else if((mayus == "no") && (numeros == "si") && (simbolos == "si"))
+            {
+                for (int i = 0; i <= longitud - 1; i++)
+                {
+                    if (i < 3)
+                        contraseña[i] = NumeroRandomChar();
+                    else if (i < 6)
+                        contraseña[i] = MinusRandom();
+                    else if (i < 8)
+                        contraseña[i] = SimboloRandom();
+                    else
+                        contraseña[i] = MinusRandom();
+                }
+                CambioImpresion(longitud, contraseña);
+            }
+            else if ((mayus == "si") && (numeros == "si") && (simbolos == "no"))            {
+                for (int i = 0; i <= longitud - 1; i++)
+                {
+                    if (i < 3)
+                        contraseña[i] = NumeroRandomChar();
+                    else if (i < 6)
+                        contraseña[i] = MayusRandom();
+                    else if (i < 8)
+                        contraseña[i] = MinusRandom();
+                    else
+                        contraseña[i] = MinusRandom();
+                }
+                CambioImpresion(longitud, contraseña);
+            }
+            else
+            {
+                for (int i = 0; i <= longitud - 1; i++)
+                {
+                    contraseña[i] = MinusRandom();
+                }
+                CambioImpresion(longitud, contraseña);
+            }
+        }
+        static char MinusRandom()
+        {
+            Random random = new Random();
+            int randomMayus = random.Next(26);
+            char letraRandom = Convert.ToChar('a' + randomMayus);
+            return letraRandom;
+        }
+        static char MayusRandom()
+        {
+            Random random = new Random();
+            int randomMayus = random.Next(26);
+            char letraRandom = Convert.ToChar('A'+randomMayus);
+            return letraRandom;
+        }
+        static char NumeroRandomChar()
+        {
+            Random random1 = new Random();
+            int numero = random1.Next(9);
+            string numeroString = Convert.ToString(numero);
+            char numeroChar = Convert.ToChar(numeroString);
+            return numeroChar;
+        }
+        static char SimboloRandom()
+        {
+            Random random = new Random();
+            string opcionSimbolos = ("#-/*%&@_");
+            int sr = random.Next(opcionSimbolos.Length);
+            char simboloRandom = opcionSimbolos[sr];
+            return simboloRandom;
+        }
+        static int NumeroRandomInt(int desde, int hasta)
+        {
+            Random random1 = new Random();
+            int numero = random1.Next(desde,hasta);
+            return numero;
+        }
+        static void CambioImpresion(int longitud, List<char> contraseña)
+        {
+            for (int i = 0; i <= longitud; i++)
+            {
+                int posicionRandom = NumeroRandomInt(0, longitud - 1);
+                char contenedorVariable = contraseña[i];
+                contraseña[i] = contraseña[posicionRandom];
+                contraseña[posicionRandom] = contenedorVariable;
+
+                Console.Write(contraseña[i]);
+            }
+        }
+    }
+}
