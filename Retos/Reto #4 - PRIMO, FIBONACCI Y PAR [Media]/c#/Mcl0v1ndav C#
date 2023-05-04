@@ -1,0 +1,86 @@
+using System;
+
+namespace Program
+{
+    class Program
+    {
+        static void Main(string[] cad)
+        {
+
+            int numeroEvaluar = 0;
+            Console.WriteLine("Escibe un numero");
+            numeroEvaluar = Convert.ToInt32(Console.ReadLine());
+
+            string respuestaPrimo = NumeroPrimo(numeroEvaluar);
+            string respuestaFibbonacci = FibbonacciRt(numeroEvaluar);
+            string respuestaPar = ParImpar(numeroEvaluar);
+
+            Console.WriteLine(Convert.ToString(numeroEvaluar) + respuestaPrimo + respuestaFibbonacci + respuestaPar);
+          
+        }
+        static string NumeroPrimo(int num)
+        {
+            int contador = 0;
+            string primo="";
+
+            if (num == 2 || num == 3 || num == 5 || num == 7)
+            {
+                primo = " Es primo";
+            }
+            else if (num != 2 && num != 3 && num != 5 && num != 7)
+            {
+                for (int i = 1; i < 100; i++)
+                {
+                    //if (i == num)
+                    //    i = i++;
+
+                    if (num%i == 0)
+                        contador ++;                   
+                    
+                }
+
+                if (contador > 2)
+                    primo = " No es primo";
+                else
+                    primo = " Es primo";
+
+            }
+            return primo;
+        }
+        static string FibbonacciRt(int num)
+        {
+            int a = 0;
+            int b = 1;
+            string res = "";
+            int contador = 0;
+
+            for (int i = 0; i < 24; i++)
+            {
+                int c = a + b;      
+                
+                if (num == a)
+                    contador++;
+                b = a;
+                a = c;               
+            }
+            if (contador > 0)
+                res = " Es fibonacci ";
+            else
+                res = " No es fibonacci ";
+
+            return res;          
+        }
+        static string ParImpar(int num)
+        {           
+            int moduloPar = num % 2;
+            string parImapar;
+
+            if (moduloPar == 0)            
+                parImapar = " es par";           
+            else            
+                parImapar = " es impar";
+            
+            return parImapar;
+        }
+    }
+}
